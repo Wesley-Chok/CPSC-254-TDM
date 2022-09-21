@@ -2,27 +2,47 @@
 #Yo
 
 import discord
+from discord.ext import commands
+
 import os 
 import dotenv
 from dotenv import load_dotenv
 
-intents = discord.Intents.default()
-intents.message_content = True
+def main():
+    intents = discord.Intents.default()
+    intents.message_content = True
 
-client = discord.Client(intents=intents)
+    #Our connection to Discord.
+    # client = discord.Client(intents=intents)
+    # our bot prefix will be . (so for example: .help)
+    # we will be using Cogs to sort most of the commands that we can do
+    # check cog.py under modules/utility
+    client = commands.Bot(command_prefix=".", intents=intents)
 
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
+    #client.event() REGISTERS an event.
+    """on_ready gets called whenever the bot has finished logging in
+    and setting things up."""
+    @client.event
+    async def on_ready():
+        print(f'We have logged in as {client.user}')
+        # for each subfolder within our directory, "modules"
+        # if a path exists for modules/{folder}/cog.py
+        # we will load the Cog by doing client.load_extension(f"modules.{folder}.cog")
+        #
+        # NOTE: LOADING cogs is what gets them to run as a command
+        #       There is an automatic built-in help command so, if you
+        #       run the bot, and type .help, it shows us all the commands
+        #       that we have created. (There should be 3: Greetings, Ping, No Category)
+        for folder in os.listdir("modules"):
+            if os.path.exists(os.path.join("modules", folder, "cog.py")):
+                await client.load_extension(f"modules.{folder}.cog")
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    #loads our token from our .env file
+    load_dotenv()
+    token = os.getenv('TOKEN')
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    #runs the token with discord so that the bot can come online.
+    client.run(token)
 
-load_dotenv()
-token = os.getenv('TOKEN')
-client.run(token)
+if __name__ == '__main__':
+    main()
