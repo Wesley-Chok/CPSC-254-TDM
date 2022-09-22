@@ -1,3 +1,8 @@
+#Filename:
+#Author(s):
+#Date Last Updated:
+#Purpose of File:
+
 import discord
 from discord.ext import commands
 
