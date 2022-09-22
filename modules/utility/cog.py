@@ -1,7 +1,9 @@
-#Filename:
-#Author(s):
-#Date Last Updated:
-#Purpose of File:
+#######################################################################################################################################################
+#Filename: cog.py                                                                                                                                     #
+#Author(s):Jared De Los Santos , Omar Trejo , Charles Morrison                                                                                        #
+#Date Last Updated: 9/22/22                                                                                                                           #
+#Purpose of File:                                                                                                                                     #
+#######################################################################################################################################################
 
 import discord
 from discord.ext import commands
