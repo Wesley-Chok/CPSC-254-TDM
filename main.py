@@ -1,5 +1,7 @@
-# This example requires the 'message_content' intent.
-#Yo
+#Filename: main.py
+#Author(s):Jared De Los Santos , Omar Trejo , Charles Morrison
+#Date Last Updated: 9/22/22
+#Purpose of File: Main file that initializes the Bot and will call function that will be features of the bot.
 
 import discord
 from discord.ext import commands
