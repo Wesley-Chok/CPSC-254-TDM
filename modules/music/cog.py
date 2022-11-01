@@ -29,15 +29,16 @@ class Music(commands.Cog, name = "Music"):
 
         return {'source': info['formats'][0]['url'], 'title': info['title']}
 
-    def play_next(self):
+    def play_next(self, ctx):
         if len(self.music_queue) > 0:
             self.is_playing = True
 
-            #get the first url
-            m_url = self.music_queue[0][0]['source']
-
             #remove the first element as you are currently playing it
             self.music_queue.pop(0)
+
+            #get the first url
+            m_url = self.music_queue[0][0]['source']
+            m_title = self.music_queue[0][0]['title']
 
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         else:
@@ -67,17 +68,25 @@ class Music(commands.Cog, name = "Music"):
                 await self.vc.move_to(self.music_queue[0][1])
             
             #remove the first element as you are currently playing it
-            self.music_queue.pop(0)
+            # self.music_queue.pop(0)
 
+            # self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
             embed=discord.Embed(title='**Now Playing**', description=f'{m_title}', color=discord.Color.red())
 
-            # for i in info:
-            #     print(f'{i}: {info[i]}')
             await ctx.send(embed=embed)
         else:
             self.is_playing = False
 
+    @commands.command(name="nowplaying", aliases=["np"], help = "Shows current playing song.")
+    async def now_playing(self, ctx):
+        if len(self.music_queue) > 0:
+            m_title = self.music_queue[0][0]['title']
+            embed=discord.Embed(title='**Now Playing**', description=f'{m_title}', color=discord.Color.red())
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("**No song is currently playing!**")
+            
     @commands.command(name="play", aliases=["p"], help="Plays a selected song from youtube")
     async def play(self, ctx, *args):
         query = " ".join(args)
@@ -148,19 +157,24 @@ class Music(commands.Cog, name = "Music"):
         else:
             await ctx.send("**There is currently no music in queue...**")
 
-    @commands.command(name="clear", aliases=["c"], help="Stops the music and clears the queue")
+    @commands.command(name="stop", aliases=["c", "clear"], help="Stops the music and clears the queue")
     async def clear(self, ctx):
         if self.vc != None and self.is_playing:
             self.vc.stop()
-        self.music_queue = []
-        await ctx.send("Music stopped and queue cleared.")
+            self.music_queue = []
+            await ctx.send("Music stopped and queue cleared.")
+        elif self.vc == None and not self.is_playing:
+            await ctx.send("**I'm not in a voice chat! I can't do that.**")
 
     @commands.command(name="leave", aliases=["disconnect", "l", "dc"], help="Kick the bot from VC")
     async def dc(self, ctx):
-        self.is_playing = False
-        self.is_paused = False
-        await ctx.send("**Leaving voice channel... :wave:**")
-        await self.vc.disconnect()
+        if self.vc != None:
+            self.is_playing = False
+            self.is_paused = False
+            self.music_queue = []
+            await ctx.send("**Leaving voice channel... :wave:**")
+            await self.vc.disconnect()
+        elif self.vc == None and not self.is_playing: await ctx.send("**I'm not in a voice chat! I can't do that.**")
 
 """setup lets us add a cog to our bot, so that we can load the cog later"""
 async def setup(bot: commands.Bot):
