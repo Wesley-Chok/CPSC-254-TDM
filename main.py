@@ -7,6 +7,8 @@
 
 import discord
 from discord.ext import commands
+from discord import File
+from easy_pil import Editor, load_image_async, Font
 
 import os 
 import dotenv
@@ -14,6 +16,7 @@ from dotenv import load_dotenv
 
 def main():
     intents = discord.Intents.default()
+    intents.members = True
     intents.message_content = True
 
     #Our connection to Discord.
@@ -37,9 +40,49 @@ def main():
         #       There is an automatic built-in help command so, if you
         #       run the bot, and type .help, it shows us all the commands
         #       that we have created. (There should be 3: Greetings, Ping, No Category)
-        for folder in os.listdir("modules"):
-            if os.path.exists(os.path.join("modules", folder, "cog.py")):
-                await client.load_extension(f"modules.{folder}.cog")
+        for filename in os.listdir("./cogs"):
+            if filename.endswith('.py'):
+                await client.load_extension(f"cogs.{filename[:-3]}")
+
+    @client.command(name='load', hidden = True)
+    # @commands.is_owner()
+    async def load(ctx, extension):
+        await client.load_extension(f'cogs.{extension}')
+        embed = discord.Embed(
+            title = f'Loaded cog: **{extension}**',
+            color = 0xff00c8,
+            timestamp = ctx.message.created_at
+        )
+
+        await ctx.send(embed=embed)
+
+    @client.command(name='unload', hidden = True)
+    # @commands.is_owner()
+    async def unload(ctx, extension):
+        await client.unload_extension(f'cogs.{extension}')
+        embed = discord.Embed(
+            title = f'Unloaded cog: **{extension}**',
+            color = 0xff00c8,
+            timestamp = ctx.message.created_at
+        )
+
+        await ctx.send(embed=embed)
+
+    @client.command(name='reload', hidden = True)
+    # @commands.is_owner()
+    async def reload(ctx):
+        for filename in os.listdir("./cogs"):
+            if filename.endswith('.py'):
+                await client.unload_extension(f"cogs.{filename[:-3]}")
+                await client.load_extension(f"cogs.{filename[:-3]}")
+        
+        embed = discord.Embed(
+            title = 'Reloaded all cogs!',
+            color = 0xff00c8,
+            timestamp = ctx.message.created_at
+        )
+
+        await ctx.send(embed=embed)
 
     #loads our token from our .env file
     load_dotenv()

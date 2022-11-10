@@ -7,6 +7,8 @@
 
 import discord
 from discord.ext import commands
+from discord import File
+from easy_pil import Editor, load_image_async, Font
 
 # Modules is the folder where we will store each subclass type
 # of things we need to do. Example given: utility. Any utility
@@ -26,11 +28,27 @@ class Greetings(commands.Cog, name = "Greetings"):
         self._last_member = None
 
     @commands.Cog.listener()
-    async def on_member_join(self,member):
+    async def on_member_join(self, member):
         channel = member.guild.system_channel
         if channel is not None:
-            await channel.send(f'Welcome {member.mention}.')
-    
+            background = Editor("TDMwelcome.png")
+            profile_image = await load_image_async(str(member.avatar.url))
+
+            profile = Editor(profile_image).resize((150, 150)).circle_image()
+            poppins = Font.poppins(size=45, variant="bold")
+
+            poppins_small = Font.poppins(size=20, variant="light")
+
+            background.paste(profile, (325, 90))
+            background.ellipse((325, 90), 150, 150, outline="white", stroke_width=5)
+
+            background.text((400, 260), f"Welcome to {member.guild.name}", color="white", font = poppins, align="center")
+            background.text((400, 325), f"{member.name}#{member.discriminator}", color="black", font=poppins_small, align="center")
+
+            file = File(fp=background.image_bytes, filename="TDMwelcome.png")
+            await channel.send(file = file)
+            await member.send(f'Welcome to {member.guild.name}!, {member.name}! :partying_face:')
+        
     @commands.command()
     async def hello(self, ctx, *, member: discord.Member = None):
         """Says hello"""
@@ -38,7 +56,7 @@ class Greetings(commands.Cog, name = "Greetings"):
         if self._last_member is None or self._last_member.id != member.id:
             await ctx.send(f'Hello {member.name}!')
         else:
-            await ctx.send(f"Hello {member.name}... You've been here before")
+            await ctx.send(f"Hello {member.name}... I've said that already!")
         self._last_member = member
 
 class Ping(commands.Cog, name = "Ping"):

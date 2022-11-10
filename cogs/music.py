@@ -3,6 +3,16 @@ from discord.ext import commands
 
 from youtube_dl import YoutubeDL
 
+
+# need to download ffmpeg: https://www.gyan.dev/ffmpeg/builds/
+# download the FULL, not essential
+# extract the files to wherever
+# add it to your environment variables
+# make sure the path is all the way up to the ffmpeg's \bin\ folder
+# example:
+# if extracted to C:\ drive then, C:\ffmpeg\bin would be the path variable
+
+
 class Music(commands.Cog, name = "Music"):
     def __init__(self, bot):
         self.bot = bot
