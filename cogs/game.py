@@ -132,7 +132,7 @@ class TTT(discord.ui.View):
     #we give these variables value so that we can determine who wins
     X = -1
     O = 1
-    Tie = 2
+    TIE = 2
 
     def __init__(self):
         super().__init__()
@@ -184,7 +184,7 @@ class TTT(discord.ui.View):
 
         # if no matches our last case is a tie
         if all(i != 0 for row in self.board for i in row):
-            return self.Tie
+            return self.TIE
 
         return None
             
