@@ -1,6 +1,8 @@
 import discord
 from discord.ui import Button, View
 from discord.ext import commands
+from discord import app_commands
+import random
 
 from typing import List
 
@@ -11,38 +13,54 @@ class Game(commands.Cog, name = "Game"):
         self.bot = bot
 
     @commands.command()
-    async def rps(self, ctx):
-        rock = Button(label="Rock", style=discord.ButtonStyle.primary, emoji ="🪨")
-        paper = Button(label="Paper", style=discord.ButtonStyle.primary, emoji ="📃")
-        scissors = Button(label="Scissors", style=discord.ButtonStyle.primary, emoji ="✂")
+    async def rps(self, ctx, user_choice):
+        """Start RPS with a bot."""
+        rpsGame = ['rock', 'paper', 'scissors']
+        if user_choice.lower() in rpsGame: 
+            bot_choice = random.choice(rpsGame)
+            await ctx.send(f'Choice: `{user_choice}`\nBot Choice: `{bot_choice}`')
+            user_choice = user_choice.lower() 
+            if user_choice == bot_choice:
+                await ctx.send("Chose the same one. You're lucky. Let's go again.")
 
-        async def button_callback(interaction):
-            await interaction.response.edit_message(content = f'{ctx.author.name} has chosen an option.')
+            # Rock Win Conditions #
+            if user_choice == 'rock' and bot_choice == 'paper':
+                await ctx.send('I won! Too easy.')
+            if user_choice == 'rock' and bot_choice == 'scissors':
+                await ctx.send('You won...')
 
-        rock.callback = button_callback
-        paper.callback = button_callback
-        scissors.callback = button_callback
+            # Paper Win Conditions #
+            if user_choice == 'paper' and bot_choice == 'rock':
+                await ctx.send('You won...')
+            if user_choice == 'paper' and bot_choice == 'scissors':
+                await ctx.send("I won! That won't work on me!")
 
-        view = View()
-        view.add_item(rock)
-        view.add_item(paper)
-        view.add_item(scissors)
-        #view.remove_item()
-        await ctx.send(f'{ctx.author.mention}', view=view)
+            # Scissor Win Conditions #
+            if user_choice == 'scissors' and bot_choice == 'paper':
+                await ctx.send('You won...')
+            if user_choice == 'scissors' and bot_choice == 'rock':
+                await ctx.send('I won! Better luck next time.')
+        else:
+            await ctx.send('> Invalid argument.')
 
     @commands.command()
-    async def ttt(self, ctx: commands.Context, user: discord.Member):
-        """Starts a tic-tac-toe game with yourself."""
-        if ctx.author == user:
+    #ctx: commands.Context
+    async def ttt(self, ctx, opp: discord.Member):
+        """Start a tictactoe game with another player."""
+        if ctx.author == opp:
             await ctx.send(f"Nice try, {ctx.author.mention}... but you cannot challenge yourself.")
             return
-        if user.bot:
+        if opp.bot:
             await ctx.send(f"{ctx.author.mention}, you'd embarass yourself trying to verse one of us.")
             return
 
-        await ctx.send("Tic Tac Toe: X goes first", view=TTT(), reference=ctx.message)
+        global player1
+        global player2
 
-    
+        player1 = ctx.author
+        player2 = opp
+
+        await ctx.send(f"Tic Tac Toe: {ctx.author.mention} is X, {opp.mention} is O", view=TTT())
 
 class TTTButton(discord.ui.Button["TTT"]):
     def __init__(self, x: int, y: int):
@@ -53,26 +71,43 @@ class TTTButton(discord.ui.Button["TTT"]):
     # This function is called whenever this particular button is pressed.
     # This is part of the "meat" of the game logic.
     async def callback(self, interaction: discord.Interaction):
+        #assert throws exception if self.view IS none
+        global player1
+        global player2
+
         assert self.view is not None
+
+        #sets the view to our graphical tictactoe class
         view: TTT = self.view
+
         state = view.board[self.y][self.x]
+
+        #doesn't allow us to click on already clicked spots
         if state in (view.X, view.O):
             return
 
         if view.current_player == view.X:
-            self.style = discord.ButtonStyle.danger
-            self.label = "X"
-            view.board[self.y][self.x] = view.X
-            view.current_player = view.O
-            content = "It is now O's turn"
+            #danger is red
+            if interaction.user != player1:
+                await interaction.response.send_message(f"It's {player1.name}'s turn", ephemeral=True)
+            else:
+                self.style = discord.ButtonStyle.danger
+                self.label = "X"
+                self.disabled = True
+                view.board[self.y][self.x] = view.X
+                view.current_player = view.O
+                content = "It is now O's turn"
         else:
+            #success is green
+            if interaction.user != player2:
+                await interaction.response.send_message(f"It's {player2.name}'s turn", ephemeral=True)
             self.style = discord.ButtonStyle.success
             self.label = "O"
+            self.disabled = True
             view.board[self.y][self.x] = view.O
             view.current_player = view.X
             content = "It is now X's turn"
 
-        self.disabled = True
         winner = view.check_board_winner()
         if winner is not None:
             if winner == view.X:
@@ -152,22 +187,6 @@ class TTT(discord.ui.View):
             return self.Tie
 
         return None
-
-
-    # async def ttt(self, ctx, user: discord.Member):
-
-    #     if ctx.author == user:
-    #         await ctx.send(f"{ctx.author.mention}... Now why on god's earth would you challenge yourself?")
-    #         return
-    #     if user.bot:
-    #         await ctx.send(f"{ctx.author.mention} You can't challenge me! You'd lose.")
-    #         return
-
-    #     components = [
-    #         [Button(style=discord.ButtonStyle.gray,label=str(idx_2+idx)) for idx_2 in range(3)] for idx in range(1,9,3)
-    #     ]
-
-
             
 
 """setup lets us add a cog to our bot, so that we can load the cog later"""

@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import File
-from easy_pil import Editor, load_image_async, Font
 
 class Moderation(commands.Cog, name = "Moderation"):
     def __init__(self, bot):

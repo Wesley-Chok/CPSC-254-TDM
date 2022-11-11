@@ -11,7 +11,6 @@ from discord import File
 from easy_pil import Editor, load_image_async, Font
 
 import os 
-import dotenv
 from dotenv import load_dotenv
 
 def main():
@@ -32,14 +31,10 @@ def main():
     @client.event
     async def on_ready():
         print(f'We have logged in as {client.user}')
-        # for each subfolder within our directory, "modules"
-        # if a path exists for modules/{folder}/cog.py
-        # we will load the Cog by doing client.load_extension(f"modules.{folder}.cog")
-        #
         # NOTE: LOADING cogs is what gets them to run as a command
         #       There is an automatic built-in help command so, if you
         #       run the bot, and type .help, it shows us all the commands
-        #       that we have created. (There should be 3: Greetings, Ping, No Category)
+        #       that we have created.
         for filename in os.listdir("./cogs"):
             if filename.endswith('.py'):
                 await client.load_extension(f"cogs.{filename[:-3]}")
