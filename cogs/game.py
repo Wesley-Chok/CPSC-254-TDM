@@ -1,3 +1,10 @@
+#######################################################################################################################################################
+#Filename: game.py                                                                                                                                    #
+#Author(s): Jared De Los Santos                                                                                                                       #
+#Date Last Updated: 11/12/22                                                                                                                          #
+#Purpose of File: Has minigames that involve player vs bot and player vs player.                                                                      #
+#######################################################################################################################################################
+
 import discord
 from discord.ui import Button, View
 from discord.ext import commands

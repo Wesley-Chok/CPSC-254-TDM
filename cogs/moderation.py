@@ -1,3 +1,10 @@
+#######################################################################################################################################################
+#Filename: moderation.py                                                                                                                              #
+#Author(s): Jared De Los Santos                                                                                                                       #
+#Date Last Updated: 11/12/22                                                                                                                          #
+#Purpose of File: For the admins and moderators of a server to take action against harmful users.                                                     #
+#######################################################################################################################################################
+
 import discord
 from discord.ext import commands
 

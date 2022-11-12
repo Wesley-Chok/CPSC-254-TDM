@@ -1,3 +1,10 @@
+#######################################################################################################################################################
+#Filename: tft.py                                                                                                                                     #
+#Author(s): Jared De Los Santos                                                                                                                       #
+#Date Last Updated: 11/12/22                                                                                                                          #
+#Purpose of File: Practice with Riot API to get average placements in the last 30 matches                                                             #
+#######################################################################################################################################################
+
 import discord
 from discord.ext import commands
 from discord import File
@@ -132,10 +139,6 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
                 break
             player_info = resp.json()
             return player_info
-
-    
-
-
 
 """setup lets us add a cog to our bot, so that we can load the cog later"""
 async def setup(bot: commands.Bot):
