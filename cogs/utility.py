@@ -1,8 +1,8 @@
 #######################################################################################################################################################
-#Filename: cog.py                                                                                                                                     #
-#Author(s):Jared De Los Santos , Omar Trejo , Charles Morrison                                                                                        #
-#Date Last Updated: 9/22/22                                                                                                                           #
-#Purpose of File:                                                                                                                                     #
+#Filename: utility.py                                                                                                                                 #
+#Author(s): Jared De Los Santos , Omar Trejo                                                                                                          #
+#Date Last Updated: 11/12/22                                                                                                                          #
+#Purpose of File: To have commands that categorized as utility                                                                                        #
 #######################################################################################################################################################
 
 import discord
