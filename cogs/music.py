@@ -14,6 +14,7 @@ from youtube_dl import YoutubeDL
 
 
 class Music(commands.Cog, name = "Music"):
+    """Plays music for your server."""
     def __init__(self, bot):
         self.bot = bot
 

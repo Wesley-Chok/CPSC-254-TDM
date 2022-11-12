@@ -21,7 +21,7 @@ from easy_pil import Editor, load_image_async, Font
 # https://www.youtube.com/watch?v=rgS_OOA12NA
 
 class Greetings(commands.Cog, name = "Greetings"):
-    """Any sort of greeting command."""
+    """Any sort of greeting command or listener event."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -51,7 +51,7 @@ class Greetings(commands.Cog, name = "Greetings"):
         
     @commands.command()
     async def hello(self, ctx, *, member: discord.Member = None):
-        """Says hello"""
+        """Says hello."""
         member = member or ctx.author
         if self._last_member is None or self._last_member.id != member.id:
             await ctx.send(f'Hello {member.name}!')
@@ -60,7 +60,7 @@ class Greetings(commands.Cog, name = "Greetings"):
         self._last_member = member
 
 class Ping(commands.Cog, name = "Ping"):
-    """Receives ping commands."""
+    """A check to see if the bot is active."""
     
     def __init__(self, bot: commands.Bot):
         self.bot = bot

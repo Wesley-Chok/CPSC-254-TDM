@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 class Moderation(commands.Cog, name = "Moderation"):
+    """Commands that help you for moderating your server."""
     def __init__(self, bot):
         self.bot = bot
     # @commands.Cog.listener()
@@ -10,6 +11,7 @@ class Moderation(commands.Cog, name = "Moderation"):
     #since it is after member, it appends all words after that parameter into reason (for clarification)
     @commands.command()
     async def kick(self, ctx, member: discord.Member = None, *, reason=None):
+        """Kick someone from your server"""
         if ctx.message.author.guild_permissions.kick_members:
             await member.kick(reason=reason)
             embed = discord.Embed(
@@ -31,8 +33,7 @@ class Moderation(commands.Cog, name = "Moderation"):
     @commands.command(name='ban')
     @commands.guild_only()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        """Have to mention the user in order for it to successfully\n
-        Can insert reason if needed, but optional:"""
+        """Bans a user from the server."""
         if ctx.message.author.guild_permissions.ban_members:
             await member.ban(reason=reason)
             embed = discord.Embed(
@@ -51,11 +52,12 @@ class Moderation(commands.Cog, name = "Moderation"):
             )
             await ctx.send(embed=embed)
 
-    """Only useable if you have the user's ID; not possible with their username and discriminator."""
+    
     @commands.command(name='unban')
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, userId):
+        """Only useable if you have the user's ID; not possible with their username and discriminator."""
         user = discord.Object(id=userId)
         
         embed = discord.Embed(
@@ -69,6 +71,7 @@ class Moderation(commands.Cog, name = "Moderation"):
 
     @commands.command()
     async def mute(self, ctx, member: discord.Member):
+        """Removes the user's ability to chat/type."""
         if ctx.message.author.guild_permissions.manage_messages:
             embed = discord.Embed(
                 color=0x57F287,
@@ -96,6 +99,7 @@ class Moderation(commands.Cog, name = "Moderation"):
 
     @commands.command()
     async def unmute(self, ctx, member: discord.Member):
+        """Restores the user's ability to chat/talk."""
         if ctx.message.author.guild_permissions.manage_messages:
             embed = discord.Embed(
                 color=0x57F287,
