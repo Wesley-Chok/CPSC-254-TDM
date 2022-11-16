@@ -1,7 +1,7 @@
 #######################################################################################################################################################
 #Filename: tft.py                                                                                                                                     #
 #Author(s): Jared De Los Santos                                                                                                                       #
-#Date Last Updated: 11/12/22                                                                                                                          #
+#Date Last Updated: 11/15/22                                                                                                                          #
 #Purpose of File: Practice with Riot API to get average placements in the last 30 matches                                                             #
 #######################################################################################################################################################
 
@@ -29,7 +29,6 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
         """Takes your last 30 matches and puts your placement in a chart."""
         summoner_name = name
 
-        #await self.get_puuid_by_summoner_name(name)
         try:
             player_dict = self.get_puuid_by_summoner_name(name)
             puuid = player_dict.get('puuid')
@@ -45,14 +44,10 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
                                 color = 0xFF0000)
             await ctx.send(embed=embed)
         
-        # puuid = player_dict.get('puuid')
-
-        #await self.get_matches_by_puuid(puuid)
         matches_list = self.get_matches_by_puuid(puuid)
 
         placement = {}
         for match_ids in matches_list:
-            #match_stats_dict = await self.get_match_by_match_id(match_ids)
             match_stats_dict = self.get_match_by_match_id(match_ids)
             match_stats_info_dict = match_stats_dict['info']
             match_info_participants_list = match_stats_info_dict['participants']
@@ -82,7 +77,7 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
         await ctx.send(embed = embed)
         await ctx.send(file=image)
 
-            #only set to work for NA1
+    #only set to work for NA1
     def get_puuid_by_summoner_name(self, summoner_name):
 
         api_url = f"https://na1.api.riotgames.com/tft/summoner/v1/summoners/by-name/{self.format_for_url(summoner_name)}?api_key={api_key}"
@@ -101,7 +96,7 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
             player_info = resp.json()
             return player_info
 
-    #summoner name to be changed for the url
+    #summoner name to be changed for the url in case there are spaces
     def format_for_url(self, summoner_name):
         formatted_summ_name = summoner_name.replace(" ", '%20')
         return formatted_summ_name

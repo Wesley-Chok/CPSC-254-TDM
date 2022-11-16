@@ -1,0 +1,9 @@
+discord.py[voice]
+python-dotenv
+youtube-dl
+matplotlib
+numpy
+pandas
+requests
+easy-pil
+ffmpeg

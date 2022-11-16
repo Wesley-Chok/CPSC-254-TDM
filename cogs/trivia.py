@@ -1,6 +1,11 @@
-# Name: Charles Morrison
-# Date: 11.15.2022
-# Description: This file communicates with the Discord API to create a CSUF computer science based trivia game for Discord servers
+#######################################################################################################################################################
+#Filename: trivia.py                                                                                                                                  #
+#Author(s): Charles Morrison (main author), Jared De Los Santos (cleaner of code)                                                                     #
+#Date Last Updated: 11/15/22                                                                                                                          #
+#Purpose of File: This file communicates with the Discord API to create a CSUF                                                                        #
+#                 computer science based trivia game for Discord servers.                                                                             #
+#######################################################################################################################################################
+
 
 import discord
 from discord.ext import commands
@@ -58,30 +63,48 @@ class TriviaLoader:
 
     # play() is just the instruction manual for the trivia game
     def play(self):
-        return "Welcome to CSUF Computer Science Trivia! \n\n How To Play: \n- To Answer Questions: Type the number next to answer (ex: 1. Bob -> Type 1) \n- To Play: Type 'start trivia'"
+        return "Welcome to CSUF Computer Science Trivia! \n\n How To Play: \n- To Answer Questions: Type the number next to answer (ex: 1. Bob -> Type 1) \n- To Play: Type '.trivia start'"
 
 
 # Trivia is used to communicate with the Discord API and the TriviaLoader class
-class Trivia(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+class Trivia(commands.Cog, name = "Trivia"):
+    """CSUF related trivia fun!"""
+    def __init__(self, bot):
+        self.bot = bot
         self.trivia = TriviaLoader() # calling TriviaLoader() class
         self.trivia.open() # loading text file data and storing them in dictionary
 
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if message.content == "play trivia":
-            await message.channel.send(self.trivia.play())
-        elif message.content == "start trivia":
-            await message.channel.send(self.trivia.generate())
-        else:
-            await message.channel.send(self.trivia.get_answer(answer=message.content)) # Process answers
-        await self.client.process_commands(message)
-
+    #required to have it show up on the help command
     @commands.command()
-    async def ping(self, ctx):
-        await ctx.send("Pong!")
+    async def trivia(self, ctx, word):
+        """Command to run the game. Two options for parameter: help or start """
+        def check(msg):
+            return msg.content == "hello" and msg.channel == ctx.channel
+        
+        if word == 'help':
+            pass
+        elif word == 'start':
+            # await ctx.channel.send(self.trivia.generate())
+            # message = await self.bot.wait_for("message",check=check)
+            # await ctx.channel.send(self.trivia.get_answer(answer=ctx.content))
+            pass
+        else:
+            await ctx.send("Invalid parameter. Only help or start.")
+            await ctx.send("Ex: .trivia help or .trivia start")
 
-async def setup(client):
-    await client.add_cog(Trivia(client))
+    @commands.Cog.listener()
+    async def on_message(self, ctx):
+        num_choices = ['1','2','3','4']
+        if ctx.content == ".trivia help":
+            await ctx.channel.send(self.trivia.play())
+        elif ctx.content == ".trivia start":
+            await ctx.channel.send(self.trivia.generate())
+        elif ctx.content in num_choices:
+            await ctx.channel.send(self.trivia.get_answer(answer=ctx.content)) # Process answers
+            return
+        else:
+            pass
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Trivia(bot))

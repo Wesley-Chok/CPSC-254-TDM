@@ -1,0 +1,6 @@
+CSUF has over ---------- students as of Fall 2022::38,726::38,726+40,133+39,873::https://www.fullerton.edu/data/institutionalresearch/student/enrollments/headcountsftesbycollegeandstudentlevel.php
+CSUF has ---------- undergraduate students who are majoring in Computer Science::1,679::1,981+1,977+1,679::https://www.fullerton.edu/ecs/cs/_resources/pdf/enrollment-and-degrees-awarded/enrollment_2021-22_ay/CS_2000-01_to_2021-22_AY.pdf
+CSUF has three Program Educational Objectives (PEOs), this includes Technical Growth, Professional Skills, and Professional Attitude and Citizenship::True::True+False+21 Savage::https://www.fullerton.edu/ecs/cs/about/
+How many floors is the Computer Science building?::5::5+4+6::https://goo.gl/maps/eAR99TKS7BXjaAMA7
+What building is located next to the Computer Science building?::Engineering Building::Humanities Building+Engineering Building+Computer Science Building::https://goo.gl/maps/2EmPk7VmmxPADqLs6
+Does CSUF merge the Engineering and Computer Science department together?::Yes::Yes+No+Sometimes::https://www.fullerton.edu/ecs/

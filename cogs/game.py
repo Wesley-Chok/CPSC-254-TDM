@@ -1,7 +1,7 @@
 #######################################################################################################################################################
 #Filename: game.py                                                                                                                                    #
 #Author(s): Jared De Los Santos                                                                                                                       #
-#Date Last Updated: 11/12/22                                                                                                                          #
+#Date Last Updated: 11/15/22                                                                                                                          #
 #Purpose of File: Has minigames that involve player vs bot and player vs player.                                                                      #
 #######################################################################################################################################################
 
@@ -20,35 +20,38 @@ class Game(commands.Cog, name = "Game"):
         self.bot = bot
 
     @commands.command()
-    async def rps(self, ctx, user_choice):
+    async def rps(self, ctx, user_choice=None):
         """Start RPS with a bot."""
         rpsGame = ['rock', 'paper', 'scissors']
-        if user_choice.lower() in rpsGame: 
-            bot_choice = random.choice(rpsGame)
-            await ctx.send(f'Choice: `{user_choice}`\nBot Choice: `{bot_choice}`')
-            user_choice = user_choice.lower() 
-            if user_choice == bot_choice:
-                await ctx.send("Chose the same one. You're lucky. Let's go again.")
-
-            # Rock Win Conditions #
-            if user_choice == 'rock' and bot_choice == 'paper':
-                await ctx.send('I won! Too easy.')
-            if user_choice == 'rock' and bot_choice == 'scissors':
-                await ctx.send('You won...')
-
-            # Paper Win Conditions #
-            if user_choice == 'paper' and bot_choice == 'rock':
-                await ctx.send('You won...')
-            if user_choice == 'paper' and bot_choice == 'scissors':
-                await ctx.send("I won! That won't work on me!")
-
-            # Scissor Win Conditions #
-            if user_choice == 'scissors' and bot_choice == 'paper':
-                await ctx.send('You won...')
-            if user_choice == 'scissors' and bot_choice == 'rock':
-                await ctx.send('I won! Better luck next time.')
+        if user_choice is None or user_choice == '':
+            await ctx.send("> You need to pass in rock, paper, or scissors!")
         else:
-            await ctx.send('> Invalid argument.')
+            if user_choice.lower() in rpsGame: 
+                bot_choice = random.choice(rpsGame)
+                await ctx.send(f"{ctx.author.name}'s choice: `{user_choice}`\nMy choice: `{bot_choice}`")
+                user_choice = user_choice.lower() 
+                if user_choice == bot_choice:
+                    await ctx.send("Chose the same one. You're lucky. Let's go again.")
+
+                # Rock Win Conditions #
+                if user_choice == 'rock' and bot_choice == 'paper':
+                    await ctx.send('I won! Too easy.')
+                if user_choice == 'rock' and bot_choice == 'scissors':
+                    await ctx.send('You won...')
+
+                # Paper Win Conditions #
+                if user_choice == 'paper' and bot_choice == 'rock':
+                    await ctx.send('You won...')
+                if user_choice == 'paper' and bot_choice == 'scissors':
+                    await ctx.send("I won! That won't work on me!")
+
+                # Scissor Win Conditions #
+                if user_choice == 'scissors' and bot_choice == 'paper':
+                    await ctx.send('You won...')
+                if user_choice == 'scissors' and bot_choice == 'rock':
+                    await ctx.send('I won! Better luck next time.')
+            else:
+                await ctx.send('> Invalid argument.')
 
     @commands.command()
     #ctx: commands.Context
