@@ -1,11 +1,11 @@
+# Project part 2 for 254!
 # TDM: A Discord Bot made with discord.py
 
 A project made through CPSC 254. Focused on using Python, along with the discord.py library to create a bot for Discord.
 
 #### Members
-- Jared De Los Santos
-- Omar Trejo
-- Charles Morrison
+- Javier Perez
+- Vincent Nguyen
 
 ## Requirements:
 - You need to be using Windows.

@@ -30,15 +30,33 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
         summoner_name = name
 
         try:
-            player_dict = self.get_puuid_by_summoner_name(name)
-            puuid = player_dict.get('puuid')
+            path = os.getcwd()
+            files = []
+            for i in os.listdir(path):
+                    if os.path.isfile(os.path.join(path,i)) and name in i:
+                        files.append(i)
+            age = files[0].replace(name, '').replace('.png', '')
+            #if the image is less than a day old, return true
+            isYoung = int(time.time()) - int(age) < 86400
+            if files and isYoung:
+                image = File(files[0])
+                cacheEmbed = discord.Embed(title="Found data in cache!", color = 0xA020F0)
+                await ctx.send(embed = cacheEmbed)
+                embed = discord.Embed(title = "Average placements in the last 30 matches", color = 0xA020F0)
+                await ctx.send(embed = embed)
+                await ctx.send(file=image)
+                return
+            else:
+                player_dict = self.get_puuid_by_summoner_name(name)
+                puuid = player_dict.get('puuid')
 
-            embed = discord.Embed(title = f"Pulling matches for {summoner_name}.",
-                                description = "Please hold... This can take between 1-5 minutes.",
-                                color = 0xA020F0)
+                embed = discord.Embed(title = f"Pulling matches for {summoner_name}.",
+                                    description = "Please hold... This can take between 1-5 minutes.",
+                                    color = 0xA020F0)
 
             await ctx.send(embed = embed)
-        except:
+        except Exception as e:
+            print(e)
             embed = discord.Embed(title = f"ERROR",
                                 description = f"Could not find {summoner_name}",
                                 color = 0xFF0000)
@@ -63,16 +81,15 @@ class TFT(commands.Cog, name = "Teamfight Tactics"):
 
         x, y = zip(*placement_lists)
 
-        image = File("placement.png")
         placement_colors = ['#FFD700', '#C0C0C0', '#CD7F32', 'blue', '#000000', '#000000', '#000000', '#000000']
         plt.bar(x, y, color = placement_colors, width = 0.4)
         plt.xlabel('Placements')
         plt.ylabel('# of times placed')
         plt.title(f'Average placements for {name}')
-
-        plt.savefig('placement.png')
+        currTime = int(time.time())
+        plt.savefig(f'{name}{currTime}.png')
         plt.close()
-
+        image = File(f"{name}{currTime}.png")
         embed = discord.Embed(title = "Average placements in the last 30 matches", color = 0xA020F0)
         await ctx.send(embed = embed)
         await ctx.send(file=image)
