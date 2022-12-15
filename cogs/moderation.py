@@ -17,6 +17,15 @@ class Moderation(commands.Cog, name = "Moderation"):
     #asterisk is sort of like a way to append all the words we write into reason
     #since it is after member, it appends all words after that parameter into reason (for clarification)
     @commands.command()
+    async def moderation(self, ctx):
+        """Lists moderation controls and instructions"""
+        await ctx.send("Ban a user: .ban [username]")
+        await ctx.send("Kick a user: .kick [username]")
+        await ctx.send("Mute a user: .mute [username]")
+        await ctx.send("Unban a user: .unban [username]")
+        await ctx.send("Unmute a user: .unmute [username]")
+        
+    @commands.command()
     async def kick(self, ctx, member: discord.Member = None, *, reason=None):
         """Kick someone from your server"""
         if ctx.message.author.guild_permissions.kick_members:
