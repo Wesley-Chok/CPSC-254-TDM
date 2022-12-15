@@ -20,6 +20,14 @@ class Game(commands.Cog, name = "Game"):
         self.bot = bot
 
     @commands.command()
+    async def games(self, ctx):
+        """Lists games categories and controls"""
+        await ctx.send("Current selection of games:")
+        await ctx.send("Rock Paper Scissors: .rps [rock, paper, or scissors]")
+        await ctx.send("Tic Tac Toe: .ttt [opponent username]")
+        await ctx.send("School Trivia: .trivia start")
+        
+    @commands.command()
     async def rps(self, ctx, user_choice=None):
         """Start RPS with a bot."""
         rpsGame = ['rock', 'paper', 'scissors']
