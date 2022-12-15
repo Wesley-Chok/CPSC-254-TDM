@@ -96,6 +96,19 @@ class Music(commands.Cog, name = "Music"):
         else:
             self.is_playing = False
 
+    @commands.command()
+    async def music(self, ctx):
+        """Lists music controls"""
+        await ctx.send("Music control instructions:")
+        await ctx.send("Kick the bot from call: .leave")
+        await ctx.send("Display currently playing song: .nowplaying")
+        await ctx.send("Pause current song: .pause")
+        await ctx.send("Play a song: .play [youtube URL]")
+        await ctx.send("Show songs in queue: .queue")
+        await ctx.send("Resume song: .resume")
+        await ctx.send("Skip current song: .skip")
+        await ctx.send("Stop playing and wipe queue: .stop")
+        
     @commands.command(name="nowplaying", aliases=["np"], help = "Shows current playing song.")
     async def now_playing(self, ctx):
         if len(self.music_queue) > 0:
